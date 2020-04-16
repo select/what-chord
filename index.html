@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <title></title>
+    <style type="text/css">
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        font-family: sans-serif;
+        font-size: 60px;
+      }
+    </style>
+    <script src="node_modules/webmidi/webmidi.min.js"></script>
+  </head>
+  <body>
+    <h1>WHAT CHORD?</h1>
+    <h2>&nbsp;</h2>
+  </body>
+  <script src="./src/music21.chord-tables.js"></script>
+  <script type="module">
+    // https://www.smashingmagazine.com/2018/03/web-midi-api/
+    if (navigator.requestMIDIAccess) {
+      console.log('This browser supports WebMIDI!');
+    } else {
+      console.log('WebMIDI is not supported in this browser.');
+    }
+    const currentNotes = new Set([]);
+
+    WebMidi.enable(function(err) {
+      console.log(WebMidi.inputs);
+      console.log(WebMidi.outputs);
+      const input = WebMidi.inputs[0];
+      if (!input) return;
+      input.addListener('noteon', 'all', (e) => {
+        console.log("Received 'noteon' message (" + e.note.name + e.note.octave + ').');
+        currentNotes.add(e.note.name);
+        currentNotesString = [...currentNotes].join(' ')
+        document.querySelector('h2').innerHTML = currentNotesString
+        try {
+          const chordNames = window.notesToChordName(currentNotesString)
+          document.querySelector('h1').innerHTML = chordNames.join(', ')
+        } catch(error) {
+          document.querySelector('h1').innerHTML = '?';
+        }
+      });
+      input.addListener('noteoff', 'all', (e) => {
+        currentNotes.delete(e.note.name);
+      });
+    });
+  </script>
+</html>

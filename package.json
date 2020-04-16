@@ -1,0 +1,20 @@
+{
+  "name": "what-chord",
+  "version": "1.0.0",
+  "description": "show chords played on midi device",
+  "main": "index.js",
+  "scripts": {
+    "start": "http-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "webmidi": "^2.5.1"
+  },
+  "devDependencies": {
+    "crawler": "^1.2.1",
+    "http-server": "^0.12.1",
+    "jsdom": "^16.2.2"
+  }
+}
