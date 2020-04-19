@@ -2263,6 +2263,7 @@ try {
       'F#m7b5': 'F# A C E',
       'F#dim': 'F# A C',
       Bm7: 'B D Gb A',
+      'D#m(maj9)': 'D# F F# A# D',
     }
     Object.entries(list).forEach(([name, notes]) => {
       try {
