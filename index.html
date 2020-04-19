@@ -1,6 +1,8 @@
 <html>
   <head>
-    <title></title>
+    <meta charset="UTF-8">
+    <title>What chord? - A reverse chord finder.</title>
+    <meta name="description" content="Find chords by entering musical notes. Use your midi keyboard to display what chord you are playing.">
     <style type="text/css">
       body {
         display: flex;
@@ -9,13 +11,30 @@
         flex-direction: column;
         font-family: sans-serif;
         font-size: 60px;
+        height: 100%;
+        overflow: hidden;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      h1 {
+        text-align: center;
+      }
+      #notesInput {
+        color: #eee;
+        min-width: 50vw;
+        text-align: center;
+      }
+      #notesInput.active {
+        border-bottom: 1px solid #000;
+        outline: none;
       }
     </style>
     <script src="node_modules/webmidi/webmidi.min.js"></script>
   </head>
   <body>
     <h1>WHAT CHORD?</h1>
-    <h2>&nbsp;</h2>
+    <h2 contenteditable="true" id="notesInput">…</h2>
   </body>
   <script src="./src/music21.chord-tables.js"></script>
   <script type="module">
@@ -25,7 +44,23 @@
     } else {
       console.log('WebMIDI is not supported in this browser.');
     }
-    const currentNotes = new Set([]);
+    let currentNotes = new Set([]);
+    const $notesInput = document.querySelector('#notesInput')
+    $notesInput.addEventListener('click', () => {
+      $notesInput.innerHTML = ''
+      $notesInput.classList.add('active')
+    })
+    $notesInput.addEventListener('input', () => {
+      currentNotes = new Set($notesInput.innerHTML.split(' '));
+      console.log("currentNotes", currentNotes);
+      const currentNotesString = $notesInput.innerHTML
+      try {
+        const chordNames = window.notesToChordName(currentNotesString)
+        document.querySelector('h1').innerHTML = chordNames[0]
+      } catch(error) {
+        document.querySelector('h1').innerHTML = '?';
+      }
+    })
 
     WebMidi.enable(function(err) {
       console.log(WebMidi.inputs);
@@ -35,8 +70,8 @@
       input.addListener('noteon', 'all', (e) => {
         console.log("Received 'noteon' message (" + e.note.name + e.note.octave + ').');
         currentNotes.add(e.note.name);
-        currentNotesString = [...currentNotes].join(' ')
-        document.querySelector('h2').innerHTML = currentNotesString
+        const currentNotesString = [...currentNotes].join(' ')
+        $notesInput.innerHTML = currentNotesString
         try {
           const chordNames = window.notesToChordName(currentNotesString)
           document.querySelector('h1').innerHTML = chordNames.join(', ')
