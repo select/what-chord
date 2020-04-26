@@ -2223,7 +2223,14 @@ const shortNames = {
   'diminished seventh': 'dim7',
   'suspended fourth': 'sus4',
   'dominant seventh': '7',
-  'quartal tetramirror': '7sus4'
+  'quartal tetramirror': '7sus4',
+  'seventh chord': '7',
+  'major triad': 'maj',
+  'minor triad': 'min',
+  'augmented triad': 'aug',
+  'diminished triad': 'dim',
+  'major': 'm',
+  'minor-major': 'm(maj'
 }
 
 
