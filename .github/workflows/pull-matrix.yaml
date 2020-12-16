@@ -10,10 +10,11 @@ jobs:
     steps:
     - name: Send message to test room
       id: matrix-chat-message
-      uses: select/matrix-message-e2e@v1.0.0
+      uses: select/matrix-message-e2e@v1.0.10
       with:
         server: ${{ secrets.MATRIX_SERVER }}
         token: ${{ secrets.MATRIX_TOKEN }}
         deviceId: ${{ secrets.MATRIX_DEVICEID }}
+        userId: ${{ secrets.MATRIX_USERID }}
         room: ${{ secrets.MATRIX_ROOM }}
         message: "${{ github.event.sender.login }} created a pull request for ${{ github.event.repository.name }}: ${{ github.event.pull_request.title }}"
